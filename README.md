@@ -1,8 +1,27 @@
-# React + Vite
+# Self-Esteem Check
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This website is to help you check your self-esteem. Questions and scores are from the book called "Ten Days to Self-Esteem". I was reading the book and I thought it will be easier if I have a web app instead of checking manually on the book. That's why I implement this website.
 
-Currently, two official plugins are available:
+## Table of contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Overview](#overview)
+- [Tech stack](#tech-stack)
+- [Refrences](#refrences)
+
+## Overview
+
+- There are three tests available - Burns Depression Checklist, Burns Anxiety Inventory, Relationship Satisfaction scale
+- Users can check their score at the end of the test
+- Users can choose dark/light theme
+
+## Tech Stack
+- [React](https://reactjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+
+## Refrences
+- Web Design - [frontend mentor](https://www.frontendmentor.io/challenges/frontend-quiz-app-BE7xkzXQnU)
+- Questions and scores - Ten Days to Self-Esteem
+
+
+
