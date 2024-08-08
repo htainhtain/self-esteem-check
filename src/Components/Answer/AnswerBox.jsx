@@ -1,6 +1,6 @@
 const AnswerBox = ({value, description, setScore, chosenScore}) => {
     const isActive = chosenScore == value
-    let btnClass = 'block bg-[#F4F6FA] dark:bg-navy text-[1.5rem] px-3 py-5 rounded-xl mb-5 w-full text-left border-purple'
+    let btnClass = 'block bg-[#F4F6FA] shadow-lg dark:bg-navy text-[1.5rem] px-3 py-5 rounded-xl mb-5 w-full text-left border-purple'
     let scoreClass = 'mr-3 bg-white text-black px-3 py-2 rounded-xl'
 
     if(isActive) {

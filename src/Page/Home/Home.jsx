@@ -2,14 +2,16 @@ import { PiMaskSadBold } from "react-icons/pi";
 import { FaHeartbeat } from "react-icons/fa";
 import { GiLovers } from "react-icons/gi";
 import LinkButton from "../../Components/Link/Link";
-import { useContext, useEffect } from "react";
-import { NavContext } from "../../store/NavContext";
+import { useEffect } from "react";
+
+import { useDispatch } from "react-redux";
+import { setTitleIcon } from "../../store/navSlice";
 
 const Home = () => {
-    const {onTitleChange} = useContext(NavContext)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        onTitleChange('', <></>)
+        dispatch(setTitleIcon({title: '', icon: ''}))
     }, [])
 
     return (
@@ -22,19 +24,19 @@ const Home = () => {
                 <div className='px-2'>
                     <LinkButton 
                         url='/depression-test'
-                        onClick={() => onTitleChange('Burns Depression Checklist', <PiMaskSadBold />)}
+                        onClick={() => dispatch(setTitleIcon({title: 'Burns Depression Checklist', icon: "PiMaskSadBold"}))}
                     >
                         <PiMaskSadBold className='inline'/> Burns Depression Checklist
                     </LinkButton>
                     <LinkButton 
                         url='/anxiety-test' 
-                        onClick={() => onTitleChange('Burns Anxiety Checklist', <FaHeartbeat />)}
+                        onClick={() => dispatch(setTitleIcon({title: 'Burns Anxiety Checklist', icon: "FaHeartbeat"}))}
                     >
                         <FaHeartbeat className='inline'/> Burns Anxiety Inventory
                     </LinkButton>
                     <LinkButton 
                         url='/relationship-test' 
-                        onClick={() => onTitleChange('Relationship Satisfaction Checklist', <GiLovers />)}
+                        onClick={() => dispatch(setTitleIcon({title: 'Relationship Satisfaction Checklist', icon: "GiLovers"}))}
                     >
                         <GiLovers className='inline'/> Relationship Satisfaction Scale 
                     </LinkButton>

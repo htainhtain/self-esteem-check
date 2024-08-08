@@ -2,11 +2,11 @@ import Home from "./Page/Home/Home"
 import DepressionTest from './Page/Depression/DepressionTest.jsx';
 import AnxietyTest from "./Page/Anxiety/AnxietyTest.jsx";
 import RelationshipTest from "./Page/Relationship/RelationshipTest.jsx";
-import NavContextProvider from './store/NavContext.jsx';
 import Nav from "./Components/Nav/Nav.jsx";
-
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import DepressionContextProvider from "./store/DepressionContext.jsx";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getSelectedTheme } from "./store/themeSlice.js";
 
 const router = createBrowserRouter([
   {
@@ -16,9 +16,7 @@ const router = createBrowserRouter([
   {
     path: "/depression-test",
     element: 
-    <DepressionContextProvider>
       <DepressionTest />
-    </DepressionContextProvider>
     ,
   },
   {
@@ -33,12 +31,17 @@ const router = createBrowserRouter([
 
 
 const App = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getSelectedTheme())
+  }, [])
 
   return (
-    <NavContextProvider>
+    <>
       <Nav />
       <RouterProvider router={router}/>
-    </NavContextProvider>
+    </>
   )
 }
 

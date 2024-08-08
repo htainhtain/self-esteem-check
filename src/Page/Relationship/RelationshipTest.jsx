@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect } from "react"
 
 import { getRelationshipSatisfactionLevel, relationshipQuestions } from "../../questions/relationship"
 
@@ -6,38 +6,29 @@ import TestDescription from "../../Components/Description/TestDescription"
 import AnswerForm from "../../Components/Answer/Answer"
 import Result from "../../Components/Result/Result"
 import Progress from "../../Components/Progress/Progress"
+import { useDispatch, useSelector } from "react-redux"
+import { handleSubmit, setScore, move as moveToNextQuestion, setIntialState } from "../../store/relationshipTestSlice"
 
 const totalQuestions = relationshipQuestions.length
 
 const RelationshipTest = () => {
-    const [idx, setIdx] = useState(0)
-    const [isSubmitted, setIsSubmitted] = useState(false)
-    const [chosenScore, setChosenScore] = useState(null)
-    const [totalScore, setTotalScore] = useState(0)
+    const dispatch = useDispatch()
+    const {
+        idx, 
+        chosenScore, 
+        isSubmitted, 
+        totalScore 
+    } = useSelector(state => state.relationshipTest)
+
+    useEffect(() => {
+        dispatch(setIntialState())
+        console.log("relationship useeffect")
+    }, [])
+
 
     const question = relationshipQuestions[idx]
-
-    const moveToNextQuestion = () => {
-        setIdx(prevId => prevId+1)
-        setChosenScore(null)
-        setIsSubmitted(false)
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        setTotalScore(prevScore => prevScore + chosenScore)
-        setIsSubmitted(true)
-    }
-
-    const setScore = (score) => {
-        setChosenScore(score)
-    }
-
     const hasQuestion = idx < relationshipQuestions.length
-
-    const resultDescription = getRelationshipSatisfactionLevel(totalScore)
     const completedPercentage = +Math.round((idx/totalQuestions) * 100)
-
 
     return (
         <section id="relationship">
@@ -53,11 +44,11 @@ const RelationshipTest = () => {
                         />
                     </div>
                     <AnswerForm 
-                        onSubmit={handleSubmit} 
-                        onSetScore={setScore} 
+                        onSubmit={(e) => dispatch(handleSubmit(e))} 
+                        onSetScore={(value) => dispatch(setScore({score: value}))}
                         chosenScore={chosenScore}
                         isSubmitted={isSubmitted}
-                        onClickNext={moveToNextQuestion}
+                        onClickNext={() => dispatch(moveToNextQuestion())}
                         isRelationship={true}
                     />
                 </div>
@@ -66,7 +57,7 @@ const RelationshipTest = () => {
                 {
                     !hasQuestion && <Result 
                         score={totalScore} 
-                        description={resultDescription}
+                        description={getRelationshipSatisfactionLevel(totalScore)}
                         label="Level of Satisfaction"
                     />
                 }

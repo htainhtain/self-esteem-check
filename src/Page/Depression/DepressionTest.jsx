@@ -1,27 +1,31 @@
-import { useContext } from "react"
 import { getDegreeOfDepression, questions } from "../../questions/depression"
 
 import Result from "../../Components/Result/Result"
 import TestDescription from "../../Components/Description/TestDescription"
 import AnswerForm from "../../Components/Answer/Answer"
-import { DepressionContext } from "../../store/DepressionContext"
 import Progress from "../../Components/Progress/Progress"
+import { useDispatch, useSelector } from "react-redux"
+
+import { handleSubmit, setScore, move as moveToNextQuestion, setIntialState} from "../../store/depressionTestSlice"
+import { useEffect } from "react"
 
 const totalQuestions = questions.length
 
 const DepressionTest = () => {
-    const { idx, 
-            chosenScore, 
-            isSubmitted, 
-            totalScore, 
-            handleSubmit,
-            moveToNextQuestion, 
-            setScore 
-        } = useContext(DepressionContext)
+    const dispatch = useDispatch()
+    const {
+        idx, 
+        chosenScore, 
+        isSubmitted, 
+        totalScore 
+    } = useSelector(state => state.depressionTest)
+
+    useEffect(() => {
+        dispatch(setIntialState())
+    }, [])
 
     const question = questions[idx]
     const hasQuestion = idx < totalQuestions
-    const resultDescription = getDegreeOfDepression(totalScore)
     const completedPercentage = +Math.round((idx/totalQuestions) * 100)
 
     return (
@@ -38,11 +42,11 @@ const DepressionTest = () => {
                         />
                     </div>
                     <AnswerForm 
-                        onSubmit={handleSubmit} 
-                        onSetScore={setScore} 
+                        onSubmit={(e) => dispatch(handleSubmit(e))} 
+                        onSetScore={(value) => dispatch(setScore({score: value}))} 
                         chosenScore={chosenScore}
                         isSubmitted={isSubmitted}
-                        onClickNext={moveToNextQuestion}
+                        onClickNext={() => dispatch(moveToNextQuestion())}
                     />
                 </div>
             }
@@ -50,7 +54,7 @@ const DepressionTest = () => {
                 {
                     !hasQuestion && <Result 
                         score={totalScore} 
-                        description={resultDescription}
+                        description={getDegreeOfDepression(totalScore)}
                         label="Degree of Depression"
                     />
                 }

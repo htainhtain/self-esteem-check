@@ -1,53 +1,34 @@
-import { useState } from "react"
-
 import { anxietyQuestions, getDegreeOfAnxiety } from "../../questions/anxiety"
 import TestDescription from "../../Components/Description/TestDescription"
 import AnswerForm from "../../Components/Answer/Answer"
 import Result from "../../Components/Result/Result"
 import Progress from "../../Components/Progress/Progress"
+import { useDispatch, useSelector } from "react-redux"
+import { move as  moveToNextQuestion, handleSubmit, setScore, setIntialState } from "../../store/anxietySlice"
+import { useEffect } from "react"
 
 const totalQuestions = anxietyQuestions.reduce((acc, ques) => acc + ques.questions.length, 0)
 
 const AnxietyTest = () => {
-    const [questionIdx, setQuestionIdx] = useState(0)
-    const [categoryIdx, setCategoryIdx] = useState(0)
-    const [completedQuestionCount, setCompletedQuestionCount] = useState(0)
-    const [isSubmitted, setIsSubmitted] = useState(false)
-    const [chosenScore, setChosenScore] = useState(null)
-    const [totalScore, setTotalScore] = useState(0)
+    const dispatch = useDispatch()
+    const {
+        categoryIdx,
+        questionIdx, 
+        completedQuestionCount, 
+        isSubmitted, 
+        chosenScore,
+        totalScore 
+    } = useSelector(state => state.anxietyTest)
 
-    const moveToNextQuestion = () => {
-        setCompletedQuestionCount(prevCount => prevCount + 1)
-        if (questionIdx == anxietyQuestions[categoryIdx].questions.length - 1) {
-            setCategoryIdx(prevIdx => prevIdx + 1)
-            setQuestionIdx(0)
-            setChosenScore(null)
-            setIsSubmitted(false)
-            return
-        }
-        setChosenScore(null)
-        setQuestionIdx(prevId => prevId+1)
-        setIsSubmitted(false)
-    }
-
-    const setScore = (score) => {
-        setChosenScore(score)
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        setTotalScore(prevScore => prevScore + chosenScore)
-        setIsSubmitted(true)
-    }
+    useEffect(() => {
+        dispatch(setIntialState())
+    }, [])
     
     const question = anxietyQuestions[categoryIdx] && anxietyQuestions[categoryIdx].questions[questionIdx]
     const category = anxietyQuestions[categoryIdx] && anxietyQuestions[categoryIdx].category
     
     const hasQuestion = categoryIdx < anxietyQuestions.length
-    const resultDescription = getDegreeOfAnxiety(totalScore)
     const completedPercentage = +Math.round((completedQuestionCount/totalQuestions) * 100)
-
-    console.log("hasQuestion: ", hasQuestion)
 
     return (
         <section id="anxiety">
@@ -64,11 +45,11 @@ const AnxietyTest = () => {
                             />
                         </div>
                         <AnswerForm 
-                            onSubmit={handleSubmit} 
-                            onSetScore={setScore} 
+                            onSubmit={(e) => dispatch(handleSubmit(e))} 
+                            onSetScore={(value) => dispatch(setScore({score: value}))} 
                             chosenScore={chosenScore}
                             isSubmitted={isSubmitted}
-                            onClickNext={moveToNextQuestion}
+                            onClickNext={() => dispatch(moveToNextQuestion())}
                         />
                     </div>
                 }
@@ -76,7 +57,7 @@ const AnxietyTest = () => {
                     {
                         !hasQuestion && <Result 
                             score={totalScore} 
-                            description={resultDescription}
+                            description={getDegreeOfAnxiety(totalScore)}
                             label="Degree of Anxiety"
                         />
                     }

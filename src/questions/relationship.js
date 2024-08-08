@@ -30,6 +30,7 @@ export const relationshipQuestions = [
 ]
 
 export const getRelationshipSatisfactionLevel = (score) => {
+    console.log("im calculating")
     let result = "minimal or no anxiety"
 
     if (score >= 0 && score <= 10) {
