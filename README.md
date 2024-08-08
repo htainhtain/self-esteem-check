@@ -17,6 +17,7 @@ This website is to help you check your self-esteem. Questions and scores are fro
 ## Tech Stack
 - [React](https://reactjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
 
 
 ## Refrences
